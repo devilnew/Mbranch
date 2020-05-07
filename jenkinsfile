@@ -1,0 +1,53 @@
+pipeline {
+   agent any
+
+    tools{
+        maven 'M2_HOME'
+       jdk 'JAVA_HOME'
+     }
+
+  stages{
+      
+      stage ('checkout'){
+          
+          steps{
+              
+              git 'https://github.com/kliakos/sparkjava-war-example.git'
+          }
+      }
+      
+      stage ('build'){
+          
+          steps{
+              
+              sh 'mvn clean package'
+          } 
+      }
+      stage ('deploy'){
+          
+          steps{
+              
+              sh '/opt/depoly-1.sh'
+          } 
+      }
+          stage ('artifact'){
+          
+          steps{
+              
+              archiveArtifacts 'target/*.war'
+          } 
+          }
+          
+      
+      stage ('email'){
+          steps{
+              
+              mail bcc: '', body: 'Jenkins job suucess', cc: '', from: '', replyTo: '', subject: 'jenkins', to: 'sahudh786@gmail.com'
+          }
+          
+      }
+  }  
+      
+  
+   
+} 
